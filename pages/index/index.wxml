@@ -1,7 +1,68 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    Weixin
+<!-- 主要内容区域 -->
+<van-row>
+  <!-- 左侧分类栏 -->
+  <van-col span="6">
+    <van-sidebar active-key="{{ activeCategory }}" bind:change="onCategoryChange">
+      <van-sidebar-item wx:for="{{ foodData }}" wx:key="id" title="{{ item.category }}" />
+    </van-sidebar>
+  </van-col>
+
+  <!-- 右侧食物列表 -->
+  <van-col span="18">
+    <van-divider contentPosition="center" customStyle="margin: 10px 0;">
+      {{ foodData[activeCategory].category }}
+    </van-divider>
+
+    <van-cell-group>
+      <van-cell wx:for="{{ foodData[activeCategory].foods }}" wx:key="id" center>
+        <view slot="title">
+          <van-row>
+            <van-col span="8">
+              <van-image width="70" height="70" fit="cover" radius="4" src="{{ item.icon }}" />
+            </van-col>
+            <van-col span="7">
+              <view class="food-name">{{ item.name }}</view>
+              <van-tag type="primary" size="medium">含水{{ item.waterContent }}%</van-tag>
+            </van-col>
+            <van-col span="9">
+              <van-stepper value="{{ selectedFoods[item.id].weight || 0 }}" min="0" step="10" integer bind:change="onStepperChange" data-food-id="{{ item.id }}" data-food-name="{{ item.name }}" data-water-content="{{ item.waterContent }}" />
+            </van-col>
+          </van-row>
+        </view>
+      </van-cell>
+    </van-cell-group>
+  </van-col>
+</van-row>
+
+<!-- 已选食物列表 -->
+<!-- <block wx:if="{{ hasSelectedFoods }}">
+  <van-divider contentPosition="center" customStyle="margin: 10px 0;">已选食物</van-divider>
+
+  <van-cell-group>
+    <van-swipe-cell wx:for="{{ selectedFoodsList }}" wx:key="id" right-width="{{ 65 }}">
+      <van-cell title="{{ item.name }}" center>
+        <view slot="right-icon">
+          <text>{{ item.weight }}g</text>
+          <van-tag type="primary" style="margin-left: 8px;">含水{{ (item.weight * item.waterContent / 100).toFixed(1) }}ml</van-tag>
+        </view>
+      </van-cell>
+      <view slot="right" class="van-swipe-cell__right">
+        <van-button type="danger" custom-style="height: 100%;" bind:click="removeFood" data-food-id="{{ item.id }}">删除</van-button>
+      </view>
+    </van-swipe-cell>
+  </van-cell-group>
+</block> -->
+
+<!-- 空状态 -->
+<van-empty wx:if="{{ !hasSelectedFoods }}" description="未选择任何食物" />
+
+<!-- 底部计算栏 -->
+<van-submit-bar price="{{ totalWater * 100 }}" button-text="计算总含水量" bind:submit="calculateTotal" tip="{{ true }}" custom-class="submit-bar">
+  <view slot="tip">
+    已选择 {{ selectedCount }} 种食物，总重量 {{ totalWeight }}g
   </view>
-</scroll-view>
+</van-submit-bar>
+
+<!-- 结果弹窗 -->
+<van-dialog id="van-dialog" />
+<van-toast id="van-toast" />

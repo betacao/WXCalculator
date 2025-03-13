@@ -1,10 +1,15 @@
-/**index.wxss**/
-page {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+.food-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+
+.van-swipe-cell__right {
+  display: flex;
+  width: 65px;
+  height: 100%;
+}
+
+.submit-bar {
+  z-index: 100;
 }
