@@ -1,12 +1,13 @@
-import {
-  foodData
-} from '../../utils/data';
 import Dialog from '@vant/weapp/dialog/dialog';
 import Toast from '@vant/weapp/toast/toast';
 
+const {
+  init
+} = require('@cloudbase/wx-cloud-client-sdk')
+
 Page({
   data: {
-    foodData: foodData,
+    // foodData: foodData,
     activeCategory: 0,
     selectedFoods: {},
     selectedFoodsList: [],
@@ -16,8 +17,24 @@ Page({
     selectedCount: 0
   },
 
-  onLoad: function () {
+  onLoad: async function () {
+    // 指定云开发环境 ID
+    wx.cloud.init({
+      env: "cloud1-8galpdysfe64e2a7",
+    })
+    const client = init(wx.cloud)
+    const models = client.models
     // 页面加载时初始化数据
+    const {
+      data,
+      requestId
+    } = await models.table.list({
+      getCount: true, // 开启用来获取总数
+    });
+
+    console.log('Request ID:', requestId);
+    console.log('Records:', data.records);
+    console.log('Total:', data.total);
   },
 
   // 切换食物分类
