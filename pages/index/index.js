@@ -1,23 +1,127 @@
-import {
-  foodData
-} from '../../utils/data';
 import Dialog from '@vant/weapp/dialog/dialog';
 import Toast from '@vant/weapp/toast/toast';
 
 Page({
   data: {
-    foodData: foodData,
+    loading: true,
+    searchValue: '',
+    foodData: [],
+    filteredFoodData: [],
+    showSelectedFoodsPopup: false,
     activeCategory: 0,
     selectedFoods: {},
     selectedFoodsList: [],
-    hasSelectedFoods: false,
     totalWater: 0,
     totalWeight: 0,
-    selectedCount: 0
+    selectedCount: 0,
+    // 统一主题色
+    themeColor: '#4fc08d'
   },
 
-  onLoad: function () {
-    // 页面加载时初始化数据
+  onLoad: async function () {
+    this.initCloud();
+    await this.loadFoodData();
+  },
+
+  // 初始化云环境
+  initCloud() {
+    wx.cloud.init({
+      env: "cloud1-8galpdysfe64e2a7",
+      traceUser: true
+    });
+  },
+
+  // 加载食物数据
+  async loadFoodData() {
+    try {
+      wx.showLoading({
+        title: '加载中...',
+        mask: true
+      });
+
+      const {
+        init
+      } = require('@cloudbase/wx-cloud-client-sdk');
+      const client = init(wx.cloud);
+      const {
+        data
+      } = await client.models.category.list({
+        select: {
+          id: true,
+          categoryName: true,
+          foods: {
+            id: true,
+            name: true,
+            waterContent: true,
+            icon: true
+          }
+        }
+      });
+
+      // 转换并排序数据
+      const displayList = data.records
+        .map(category => ({
+          id: category.id,
+          categoryName: category.categoryName,
+          foods: category.foods.map(food => ({
+            id: food.id,
+            name: food.name,
+            waterContent: food.waterContent,
+            icon: food.icon
+          }))
+        }))
+        .sort((a, b) => a.id - b.id);
+
+      this.setData({
+        foodData: displayList,
+        filteredFoodData: displayList,
+        loading: false
+      });
+    } catch (error) {
+      console.error('加载数据失败:', error);
+      Toast.fail('数据加载失败，请重试');
+    } finally {
+      wx.hideLoading();
+    }
+  },
+
+  // 搜索功能
+  onSearch(event) {
+    const searchValue = event.detail.trim().toLowerCase();
+
+    if (!searchValue) {
+      // 如果搜索框为空，恢复原始数据
+      this.setData({
+        filteredFoodData: this.data.foodData,
+        searchValue
+      });
+      return;
+    }
+
+    // 过滤食物数据
+    const filteredData = this.data.foodData.map(category => {
+      // 复制分类，但只包含匹配的食物
+      return {
+        ...category,
+        foods: category.foods.filter(food =>
+          food.name.toLowerCase().includes(searchValue)
+        )
+      };
+    }).filter(category => category.foods.length > 0); // 只保留有匹配食物的分类
+
+    this.setData({
+      filteredFoodData: filteredData,
+      searchValue,
+      activeCategory: filteredData.length > 0 ? 0 : this.data.activeCategory
+    });
+  },
+
+  // 清除搜索
+  onSearchClear() {
+    this.setData({
+      filteredFoodData: this.data.foodData,
+      searchValue: ''
+    });
   },
 
   // 切换食物分类
@@ -35,7 +139,6 @@ Page({
       waterContent
     } = event.currentTarget.dataset;
     const weight = event.detail;
-
     const selectedFoods = {
       ...this.data.selectedFoods
     };
@@ -51,67 +154,54 @@ Page({
       };
     }
 
-    const selectedFoodsList = Object.values(selectedFoods);
-    const hasSelectedFoods = selectedFoodsList.length > 0;
-
-    // 计算总重量和总数量
-    let totalWeight = 0;
-    selectedFoodsList.forEach(food => {
-      totalWeight += food.weight;
-    });
-
-    this.setData({
-      selectedFoods,
-      selectedFoodsList,
-      hasSelectedFoods,
-      totalWeight,
-      selectedCount: selectedFoodsList.length
-    });
-
-    this.calculateWaterContent();
+    this.updateFoodSelections(selectedFoods);
   },
 
   // 移除已选食物
   removeFood(event) {
     const foodId = event.currentTarget.dataset.foodId;
-    const selectedFoods = {
-      ...this.data.selectedFoods
-    };
+    Dialog.confirm({
+      title: '确认删除',
+      message: '是否删除此食物？'
+    }).then(() => {
+      const selectedFoods = {
+        ...this.data.selectedFoods
+      };
+      delete selectedFoods[foodId];
 
-    delete selectedFoods[foodId];
-
-    const selectedFoodsList = Object.values(selectedFoods);
-    const hasSelectedFoods = selectedFoodsList.length > 0;
-
-    // 计算总重量和总数量
-    let totalWeight = 0;
-    selectedFoodsList.forEach(food => {
-      totalWeight += food.weight;
+      this.updateFoodSelections(selectedFoods);
+      Toast.success('已删除');
+    }).catch(() => {
+      // 用户点击取消，不执行任何操作
     });
+  },
+
+  // 更新食物选择相关的所有数据
+  updateFoodSelections(selectedFoods) {
+    const selectedFoodsList = Object.values(selectedFoods);
+    const totalWeight = selectedFoodsList.reduce((total, food) => total + food.weight, 0);
+    const totalWater = this.calculateTotalWater(selectedFoodsList);
+
+    // 如果没有选中的食物，自动关闭弹窗
+    if (selectedFoodsList.length === 0 && this.data.showSelectedFoodsPopup) {
+      this.onSelectedFoodsPopupClose();
+    }
 
     this.setData({
       selectedFoods,
       selectedFoodsList,
-      hasSelectedFoods,
       totalWeight,
+      totalWater,
       selectedCount: selectedFoodsList.length
     });
-
-    this.calculateWaterContent();
-
-    Toast('已删除');
   },
 
-  // 计算含水量
-  calculateWaterContent() {
-    let totalWater = 0;
-    this.data.selectedFoodsList.forEach(food => {
-      totalWater += (food.weight * food.waterContent / 100);
-    });
-
-    this.setData({
-      totalWater: parseFloat(totalWater.toFixed(1))
-    });
+  // 计算总含水量
+  calculateTotalWater(foodsList) {
+    const totalWater = foodsList.reduce((total, food) => {
+      return total + (food.weight * food.waterContent / 100);
+    }, 0);
+    return parseFloat(totalWater.toFixed(1));
   },
 
   // 计算总含水量并展示结果
@@ -130,7 +220,26 @@ Page({
     Dialog.alert({
       title: '计算结果',
       message: `您摄入的食物总含水量为：${this.data.totalWater}ml\n\n${detailText}`,
-      confirmButtonText: '我知道了'
+      confirmButtonText: '我知道了',
+      confirmButtonColor: this.data.themeColor
     });
-  }
+  },
+
+  // 显示已选食物弹窗
+  showSelectedFoods() {
+    if (this.data.selectedFoodsList.length === 0) {
+      Toast.fail('请先选择食物');
+      return;
+    }
+    this.setData({
+      showSelectedFoodsPopup: true
+    });
+  },
+
+  // 关闭已选食物弹窗
+  onSelectedFoodsPopupClose() {
+    this.setData({
+      showSelectedFoodsPopup: false
+    });
+  },
 });

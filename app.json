@@ -3,9 +3,9 @@
     "pages/index/index"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#f8f8f8",
+    "navigationBarBackgroundColor": "#4fc08d",
     "navigationBarTitleText": "食物含水量计算器",
-    "navigationBarTextStyle": "black",
+    "navigationBarTextStyle": "white",
     "backgroundTextStyle": "dark",
     "backgroundColor": "#f8f8f8"
   },
