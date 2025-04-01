@@ -1,6 +1,6 @@
 .food-name {
-  font-size: 14px;
-  margin-bottom: 8px;
+  font-size: 28rpx;
+  margin-bottom: 16rpx;
   font-weight: 500;
 }
 
@@ -9,14 +9,14 @@
 }
 
 .food-weight {
-  font-size: 14px;
+  font-size: 28rpx;
   color: #323233;
 }
 
 .food-water {
-  font-size: 12px;
+  font-size: 24rpx;
   color: #4fc08d;
-  margin-top: 4px;
+  margin-top: 8rpx;
 }
 
 .delete-btn {
@@ -26,8 +26,8 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 65px;
-  font-size: 14px;
+  width: 130rpx;
+  font-size: 28rpx;
 }
 
 .stepper-container {
@@ -37,7 +37,7 @@
 }
 
 .stepper-label {
-  font-size: 12px;
+  font-size: 24rpx;
   color: #969799;
-  margin-bottom: 4px;
+  margin-bottom: 8rpx;
 }

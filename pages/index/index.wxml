@@ -15,31 +15,33 @@
 
     <!-- 右侧食物列表 -->
     <van-col span="18">
-      <van-divider contentPosition="center" customStyle="margin: 10px 0; color: {{ themeColor }}; border-color: {{ themeColor }};">
+      <van-divider contentPosition="center" customStyle="margin: 20rpx 0; color: {{ themeColor }}; border-color: {{ themeColor }};">
         {{ filteredFoodData[activeCategory].categoryName }}
       </van-divider>
 
-      <van-cell-group>
-        <van-cell wx:for="{{ filteredFoodData[activeCategory].foods }}" wx:key="id" center>
-          <view slot="title">
-            <van-row>
-              <van-col span="8">
-                <van-image width="65" height="65" fit="cover" radius="8" src="{{ item.icon }}" lazy-load />
-              </van-col>
-              <van-col span="6">
-                <view class="food-name">{{ item.name }}</view>
-                <van-tag plain color="{{ themeColor }}">含水{{ item.waterContent }}%</van-tag>
-              </van-col>
-              <van-col span="10">
-                <view class="stepper-container">
-                  <view class="stepper-label">克数</view>
-                  <van-stepper value="{{ selectedFoods[item.id].weight || 0 }}" min="0" step="10" integer bind:change="onStepperChange" data-food-id="{{ item.id }}" data-food-name="{{ item.name }}" data-water-content="{{ item.waterContent }}" theme="round" button-size="30px" />
-                </view>
-              </van-col>
-            </van-row>
-          </view>
-        </van-cell>
-      </van-cell-group>
+      <scroll-view class="content" scroll-y style="height: 1100rpx;">
+        <van-cell-group>
+          <van-cell wx:for="{{ filteredFoodData[activeCategory].foods }}" wx:key="id" center>
+            <view slot="title">
+              <van-row>
+                <van-col span="8">
+                  <van-image width="65" height="65" fit="cover" radius="8" src="{{ item.icon }}" lazy-load />
+                </van-col>
+                <van-col span="6">
+                  <view class="food-name">{{ item.name }}</view>
+                  <van-tag plain color="{{ themeColor }}">含水{{ item.waterContent }}%</van-tag>
+                </van-col>
+                <van-col span="10">
+                  <view class="stepper-container">
+                    <view class="stepper-label">克数</view>
+                    <van-stepper value="{{ selectedFoods[item.id].weight || 0 }}" min="0" step="10" integer bind:change="onStepperChange" data-food-id="{{ item.id }}" data-food-name="{{ item.name }}" data-water-content="{{ item.waterContent }}" theme="round" button-size="50rpx" />
+                  </view>
+                </van-col>
+              </van-row>
+            </view>
+          </van-cell>
+        </van-cell-group>
+      </scroll-view>
     </van-col>
   </van-row>
 
