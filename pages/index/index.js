@@ -39,27 +39,23 @@ Page({
         mask: true
       });
 
-      const {
-        init
-      } = require('@cloudbase/wx-cloud-client-sdk');
-      const client = init(wx.cloud);
-      const {
-        data
-      } = await client.models.category.list({
-        select: {
-          id: true,
-          categoryName: true,
-          foods: {
-            id: true,
-            name: true,
-            waterContent: true,
-            icon: true
-          }
-        }
-      });
+      console.log('🔍 [loadFoodData] 开始请求数据...');
+      // 从gitee远程URL请求JSON数据
+      const res = await new Promise((resolve, reject) => {
+        wx.request({
+          url: 'https://gitee.com/BetaCao/wxcalculator/raw/master/categorized_data.json',
+          method: 'GET',
+          success: resolve,
+          fail: reject
+        });
+      }); 
+      console.log('✅ 请求完成, 状态码:', res.statusCode, '返回数据:', res.data);
+      if (res.statusCode !== 200 || !res.data) {
+        throw new Error('无效响应');
+      }
 
       // 转换并排序数据
-      const displayList = data.records
+      const displayList = res.data
         .map(category => ({
           id: category.id,
           categoryName: category.categoryName,
