@@ -56,19 +56,24 @@
   padding: 16rpx 12rpx;
 }
 
+.drawer-food-card {
+  position: relative;
+  margin-bottom: 16rpx;
+}
+
 .drawer-food-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 28rpx 20rpx;
   background: white;
-  border-radius: 12rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  margin-bottom: 12rpx;
-  transition: transform 0.2s;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  position: relative;
+  transition: all 0.3s;
 }
 
-.drawer-food-item:active {
+.drawer-food-card:active .drawer-food-item {
   transform: scale(0.98);
 }
 
@@ -138,15 +143,40 @@
   font-weight: 500;
 }
 
-.drawer-delete-btn {
+.drawer-delete-icon {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
   background: linear-gradient(135deg, #ff6b6b 0%, #ee0a24 100%);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 160rpx;
-  font-size: 28rpx;
-  font-weight: 600;
-  letter-spacing: 2rpx;
+  box-shadow: 0 4rpx 12rpx rgba(238, 10, 36, 0.35);
+  z-index: 10;
+  transition: all 0.3s;
+}
+
+.drawer-delete-icon::before,
+.drawer-delete-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20rpx;
+  height: 3rpx;
+  background: white;
+  border-radius: 2rpx;
+}
+
+.drawer-delete-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.drawer-delete-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.drawer-delete-icon:active {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6rpx 16rpx rgba(238, 10, 36, 0.45);
 }

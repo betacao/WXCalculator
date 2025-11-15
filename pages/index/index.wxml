@@ -75,7 +75,7 @@
 
     <!-- 食物列表 -->
     <view wx:if="{{ selectedFoodsList.length > 0 }}" class="drawer-list">
-      <van-swipe-cell wx:for="{{ selectedFoodsList }}" wx:key="id" right-width="{{ 80 }}">
+      <view wx:for="{{ selectedFoodsList }}" wx:key="id" class="drawer-food-card">
         <view class="drawer-food-item">
           <view class="drawer-food-left">
             <view class="drawer-food-name">{{ item.name }}</view>
@@ -90,8 +90,8 @@
             <view class="drawer-water-unit">ml</view>
           </view>
         </view>
-        <view slot="right" class="drawer-delete-btn" catch:tap="removeFood" data-food-id="{{ item.id }}">删除</view>
-      </van-swipe-cell>
+        <view class="drawer-delete-icon" catch:tap="removeFood" data-food-id="{{ item.id }}"></view>
+      </view>
     </view>
 
     <van-empty wx:else description="暂无已选食物" />

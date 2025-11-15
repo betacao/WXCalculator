@@ -274,7 +274,7 @@ Page({
         totalWeight: this.data.totalWeight
       });
 
-      Toast.success(result.isUpdate ? '记录已更新' : '保存成功');
+      Toast.success(result.isUpdate ? '已叠加到今日记录' : '保存成功');
 
       this.setData({
         selectedFoods: {},
