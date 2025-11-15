@@ -2,10 +2,14 @@
   min-height: 100vh;
   background: linear-gradient(180deg, #4fc08d 0%, #f8f8f8 300rpx);
   padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* 未登录状态 */
 .login-section {
+  width: 96%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,6 +17,8 @@
 }
 
 .login-card {
+  width: 100%;
+  max-width: 600rpx;
   background: white;
   border-radius: 20rpx;
   padding: 80rpx 60rpx;
@@ -58,6 +64,7 @@
 
 /* 已登录状态 */
 .profile-section {
+  width: 96%;
   padding-top: 40rpx;
 }
 
@@ -65,9 +72,9 @@
   display: flex;
   align-items: center;
   background: white;
-  border-radius: 20rpx;
-  padding: 40rpx;
-  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  padding: 32rpx 24rpx;
+  margin-bottom: 16rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 }
 
@@ -98,9 +105,9 @@
 .stats-section {
   display: flex;
   background: white;
-  border-radius: 20rpx;
-  padding: 40rpx;
-  margin-bottom: 20rpx;
+  border-radius: 16rpx;
+  padding: 32rpx 24rpx;
+  margin-bottom: 16rpx;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 }
 
@@ -124,12 +131,12 @@
 .stats-divider {
   width: 2rpx;
   background-color: #f0f0f0;
-  margin: 0 40rpx;
+  margin: 0 24rpx;
 }
 
 .menu-section {
   background: white;
-  border-radius: 20rpx;
+  border-radius: 16rpx;
   overflow: hidden;
   box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
 }

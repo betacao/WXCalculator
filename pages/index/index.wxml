@@ -24,7 +24,7 @@
 
     <!-- 右侧食物列表 -->
     <van-col span="18">
-      <van-divider contentPosition="center" customStyle="margin: 20rpx 0; color: {{ themeColor }}; border-color: {{ themeColor }};">
+      <van-divider contentPosition="center" customStyle="margin: 16rpx 0; color: {{ themeColor }}; border-color: {{ themeColor }};">
         {{ filteredFoodData[activeCategory].categoryName }}
       </van-divider>
 
@@ -65,20 +65,33 @@
 </van-goods-action>
 
 <!-- 已选食物抽屉面板 -->
-<van-popup show="{{ showSelectedFoodsPopup }}" position="right" custom-style="width: 85%; height: 100%;" bind:close="closePopup" safe-area-inset-top="{{ true }}" safe-area-inset-bottom="{{ true }}" round="{{ false }}">
+<van-popup show="{{ showSelectedFoodsPopup }}" position="right" custom-style="width: 88%; height: 100%;" bind:close="closePopup" safe-area-inset-top="{{ true }}" safe-area-inset-bottom="{{ true }}" round="{{ false }}">
   <view class="drawer-content">
-    <view wx:if="{{ selectedFoodsList.length > 0 }}">
-      <van-cell-group title="食物明细">
-        <van-swipe-cell wx:for="{{ selectedFoodsList }}" wx:key="id" right-width="{{ 65 }}">
-          <van-cell title="{{ item.name }}" label="含水{{ item.waterContent }}%" size="large">
-            <view slot="right-icon" class="cell-value-section">
-              <view class="food-weight">{{ item.weight }}g</view>
-              <view class="food-water">{{ utils.calculateWater(item.weight, item.waterContent) }}ml</view>
+    <!-- 抽屉标题 -->
+    <view class="drawer-header">
+      <view class="drawer-title">已选食物</view>
+      <van-icon name="cross" size="20px" color="#666" bind:tap="closePopup" />
+    </view>
+
+    <!-- 食物列表 -->
+    <view wx:if="{{ selectedFoodsList.length > 0 }}" class="drawer-list">
+      <van-swipe-cell wx:for="{{ selectedFoodsList }}" wx:key="id" right-width="{{ 80 }}">
+        <view class="drawer-food-item">
+          <view class="drawer-food-left">
+            <view class="drawer-food-name">{{ item.name }}</view>
+            <view class="drawer-food-meta">
+              <text class="meta-tag">含水{{ item.waterContent }}%</text>
+              <text class="meta-dot">·</text>
+              <text class="meta-weight">{{ item.weight }}g</text>
             </view>
-          </van-cell>
-          <view slot="right" class="delete-btn" catch:tap="removeFood" data-food-id="{{ item.id }}">删除</view>
-        </van-swipe-cell>
-      </van-cell-group>
+          </view>
+          <view class="drawer-food-right">
+            <view class="drawer-water-value">{{ utils.calculateWater(item.weight, item.waterContent) }}</view>
+            <view class="drawer-water-unit">ml</view>
+          </view>
+        </view>
+        <view slot="right" class="drawer-delete-btn" catch:tap="removeFood" data-food-id="{{ item.id }}">删除</view>
+      </van-swipe-cell>
     </view>
 
     <van-empty wx:else description="暂无已选食物" />

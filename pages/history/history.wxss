@@ -2,14 +2,17 @@
 .container {
   min-height: 100vh;
   background: linear-gradient(180deg, #f0f9f6 0%, #fafafa 400rpx);
-  padding: 20rpx 16rpx;
+  padding: 20rpx;
   padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ==================== 页面标题 ==================== */
 .page-header {
+  width: 96%;
   margin-bottom: 20rpx;
-  padding: 0 4rpx;
 }
 
 .header-title {
@@ -26,16 +29,17 @@
 
 /* ==================== 统计卡片组 ==================== */
 .stats-grid {
+  width: 96%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10rpx;
-  margin-bottom: 18rpx;
+  margin-bottom: 16rpx;
 }
 
 .stat-card {
   background: white;
   border-radius: 16rpx;
-  padding: 24rpx 12rpx;
+  padding: 24rpx 8rpx;
   box-shadow: 0 4rpx 20rpx rgba(79, 192, 141, 0.1);
   display: flex;
   flex-direction: column;
@@ -62,10 +66,11 @@
 
 /* ==================== 图表卡片 ==================== */
 .chart-card {
+  width: 96%;
   background: white;
   border-radius: 16rpx;
-  padding: 24rpx 20rpx;
-  margin-bottom: 18rpx;
+  padding: 24rpx 16rpx;
+  margin-bottom: 16rpx;
   box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
 }
 
@@ -122,6 +127,7 @@
 
 /* ==================== 记录列表 ==================== */
 .records-wrapper {
+  width: 96%;
   margin-bottom: 20rpx;
 }
 
@@ -157,7 +163,7 @@
 .record-card {
   background: white;
   border-radius: 16rpx;
-  margin-bottom: 14rpx;
+  margin-bottom: 12rpx;
   overflow: hidden;
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
   transition: all 0.3s;
@@ -171,7 +177,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24rpx 20rpx;
+  padding: 24rpx 16rpx;
   border-bottom: 2rpx solid #f5f5f5;
 }
 

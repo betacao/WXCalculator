@@ -1,54 +1,152 @@
+/* ==================== 食物列表 ==================== */
+.content {
+  padding-bottom: 20rpx;
+}
+
 .food-name {
-  font-size: 28rpx;
-  margin-bottom: 16rpx;
-  font-weight: 500;
-}
-
-.cell-value-section {
-  text-align: right;
-}
-
-.food-weight {
-  font-size: 28rpx;
-  color: #323233;
-}
-
-.food-water {
-  font-size: 24rpx;
-  color: #4fc08d;
-  margin-top: 8rpx;
-}
-
-.delete-btn {
-  background-color: #ee0a24;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 130rpx;
-  font-size: 28rpx;
+  font-size: 30rpx;
+  margin-bottom: 12rpx;
+  font-weight: 600;
+  color: #2c3e50;
 }
 
 .stepper-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-end
+  align-items: flex-end;
+  gap: 8rpx;
 }
 
 .stepper-label {
-  font-size: 24rpx;
-  color: #969799;
-  margin-bottom: 8rpx;
+  font-size: 22rpx;
+  color: #7f8c8d;
+  font-weight: 500;
 }
 
-.content {
-  padding-bottom: 20rpx;
-}
-
+/* ==================== 已选食物抽屉 ==================== */
 .drawer-content {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(180deg, #f0f9f6 0%, #fafafa 200rpx);
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 24rpx;
+  background: white;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 10;
+}
+
+.drawer-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2c3e50;
+  letter-spacing: 1rpx;
+}
+
+.drawer-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16rpx 12rpx;
+}
+
+.drawer-food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28rpx 20rpx;
+  background: white;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  margin-bottom: 12rpx;
+  transition: transform 0.2s;
+}
+
+.drawer-food-item:active {
+  transform: scale(0.98);
+}
+
+.drawer-food-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.drawer-food-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #2c3e50;
+  line-height: 1.3;
+}
+
+.drawer-food-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  font-size: 24rpx;
+}
+
+.meta-tag {
+  background: linear-gradient(135deg, #e8f8f2 0%, #d4f1e6 100%);
+  color: #4fc08d;
+  font-weight: 600;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+  font-size: 22rpx;
+}
+
+.meta-dot {
+  color: #d0d0d0;
+  font-weight: bold;
+}
+
+.meta-weight {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.drawer-food-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  margin-left: 24rpx;
+  min-width: 120rpx;
+}
+
+.drawer-water-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  background: linear-gradient(135deg, #4fc08d 0%, #3aa876 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  margin-bottom: 4rpx;
+}
+
+.drawer-water-unit {
+  font-size: 24rpx;
+  color: #95a5a6;
+  font-weight: 500;
+}
+
+.drawer-delete-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee0a24 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 160rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
 }
