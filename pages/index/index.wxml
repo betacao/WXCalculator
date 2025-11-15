@@ -1,3 +1,12 @@
+<wxs module="utils">
+  // 计算单个食物的含水量
+  var calculateWater = function(weight, waterContent) {
+    var result = weight * waterContent / 100;
+    return result.toFixed(1);
+  };
+  module.exports.calculateWater = calculateWater;
+</wxs>
+
 <page-meta page-style="{{ showSelectedFoodsPopup ? 'overflow: hidden;' : '' }}" />
 
 <!-- 搜索栏 -->
@@ -19,7 +28,7 @@
         {{ filteredFoodData[activeCategory].categoryName }}
       </van-divider>
 
-      <scroll-view class="content" scroll-y style="height: 1100rpx;">
+      <scroll-view class="content" scroll-y style="height: calc(100vh - 300rpx);" enable-flex>
         <van-cell-group>
           <van-cell wx:for="{{ filteredFoodData[activeCategory].foods }}" wx:key="id" center>
             <view slot="title">
@@ -51,12 +60,12 @@
 
 <!-- 浮动操作按钮 -->
 <van-goods-action>
-  <van-goods-action-icon icon="cart-o" text="已选食物" info="{{ selectedCount }}" bind:click="showSelectedFoods" />
-  <van-goods-action-button text="计算含水量" color="{{ themeColor }}" bind:click="calculateTotal" />
+  <van-goods-action-icon icon="cart-o" text="已选食物" info="{{ selectedCount }}" bind:click="showPopup" />
+  <van-goods-action-button text="计算含水量" color="{{ themeColor }}" bind:click="showResult" />
 </van-goods-action>
 
 <!-- 已选食物抽屉面板 -->
-<van-popup show="{{ showSelectedFoodsPopup }}" position="right" custom-style="width: 85%; height: 100%;" bind:close="onSelectedFoodsPopupClose" safe-area-inset-top="{{ true }}" round="{{ false }}">
+<van-popup show="{{ showSelectedFoodsPopup }}" position="right" custom-style="width: 85%; height: 100%;" bind:close="closePopup" safe-area-inset-top="{{ true }}" safe-area-inset-bottom="{{ true }}" round="{{ false }}">
   <view class="drawer-content">
     <view wx:if="{{ selectedFoodsList.length > 0 }}">
       <van-cell-group title="食物明细">
@@ -64,7 +73,7 @@
           <van-cell title="{{ item.name }}" label="含水{{ item.waterContent }}%" size="large">
             <view slot="right-icon" class="cell-value-section">
               <view class="food-weight">{{ item.weight }}g</view>
-              <view class="food-water">{{ (item.weight * item.waterContent / 100) }}ml</view>
+              <view class="food-water">{{ utils.calculateWater(item.weight, item.waterContent) }}ml</view>
             </view>
           </van-cell>
           <view slot="right" class="delete-btn" catch:tap="removeFood" data-food-id="{{ item.id }}">删除</view>

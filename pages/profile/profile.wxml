@@ -1,0 +1,114 @@
+<view class="container">
+  <!-- 未登录状态 -->
+  <view wx:if="{{ !hasUserInfo }}" class="login-section">
+    <view class="login-card">
+      <image class="login-icon" src="/images/login.png" mode="aspectFit" />
+      <view class="login-title">欢迎使用食物含水量计算器</view>
+      <view class="login-desc">登录后可以保存每日摄入记录</view>
+      <button class="login-btn" bind:tap="handleLogin">
+        <van-icon name="wechat" size="20px" />
+        <text>微信登录</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 已登录状态 -->
+  <view wx:else class="profile-section">
+    <!-- 用户信息卡片 -->
+    <view class="user-card" bind:tap="showEditDialog">
+      <image class="avatar" src="{{ userInfo.avatarUrl }}" mode="aspectFill" />
+      <view class="user-info">
+        <view class="nickname">
+          {{ userInfo.nickName }}
+          <van-tag wx:if="{{ userInfo.needUpdate }}" type="warning" size="mini" style="margin-left: 8rpx;">未完善</van-tag>
+        </view>
+        <view class="user-desc">点击编辑个人资料</view>
+      </view>
+      <van-icon name="arrow" color="#ccc" />
+    </view>
+
+    <!-- 数据统计 -->
+    <view class="stats-section">
+      <view class="stats-item">
+        <view class="stats-value">{{ statistics.totalRecords }}</view>
+        <view class="stats-label">累计记录</view>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <view class="stats-value">{{ statistics.recentWater }}ml</view>
+        <view class="stats-label">近7天摄入</view>
+      </view>
+    </view>
+
+    <!-- 功能菜单 -->
+    <view class="menu-section">
+      <van-cell-group>
+        <van-cell
+          title="历史记录"
+          icon="records"
+          is-link
+          bind:click="goToHistory"
+        />
+        <van-cell
+          title="退出登录"
+          icon="revoke"
+          bind:click="handleLogout"
+        />
+      </van-cell-group>
+    </view>
+  </view>
+
+  <!-- 编辑资料弹窗 -->
+  <van-popup
+    show="{{ showEditProfile }}"
+    position="bottom"
+    round
+    closeable
+    bind:close="closeEditDialog"
+    custom-style="height: 70%; padding-bottom: env(safe-area-inset-bottom);"
+    safe-area-inset-bottom="{{ true }}"
+  >
+    <view class="edit-profile-container">
+      <view class="edit-title">编辑个人资料</view>
+
+      <!-- 头像选择 -->
+      <view class="edit-item">
+        <view class="edit-label">头像</view>
+        <button
+          class="avatar-btn"
+          open-type="chooseAvatar"
+          bind:chooseavatar="onSelectAvatar"
+        >
+          <image class="edit-avatar" src="{{ tempAvatar }}" mode="aspectFill" />
+          <view class="avatar-tip">点击更换</view>
+        </button>
+      </view>
+
+      <!-- 昵称输入 -->
+      <view class="edit-item">
+        <view class="edit-label">昵称</view>
+        <input
+          class="nickname-input"
+          type="nickname"
+          value="{{ tempNickname }}"
+          placeholder="请输入昵称"
+          maxlength="20"
+          bind:input="onInputNickname"
+        />
+      </view>
+
+      <!-- 提示信息 -->
+      <view class="edit-tip">
+        <van-icon name="info-o" size="14px" color="#ff9800" />
+        <text>由于微信隐私政策，需要手动填写昵称和头像</text>
+      </view>
+
+      <!-- 保存按钮 -->
+      <view class="edit-actions">
+        <button class="save-btn" bind:tap="handleSave">保存</button>
+      </view>
+    </view>
+  </van-popup>
+</view>
+
+<van-toast id="van-toast" />

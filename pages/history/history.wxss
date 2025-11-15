@@ -1,0 +1,74 @@
+.container {
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+}
+
+.stats-card {
+  display: flex;
+  background: linear-gradient(135deg, #4fc08d 0%, #3aa876 100%);
+  border-radius: 16rpx;
+  padding: 40rpx 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(79, 192, 141, 0.3);
+}
+
+.stat-item {
+  flex: 1;
+  text-align: center;
+  color: white;
+}
+
+.stat-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.record-section {
+  background-color: white;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.section-title {
+  padding: 30rpx 30rpx 20rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.record-water {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 20rpx;
+}
+
+.water-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #4fc08d;
+}
+
+.water-unit {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.delete-btn {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ee0a24;
+  color: white;
+  font-size: 28rpx;
+  padding: 0 20rpx;
+}

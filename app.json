@@ -1,6 +1,8 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/profile/profile",
+    "pages/history/history"
   ],
   "window": {
     "navigationBarBackgroundColor": "#4fc08d",
@@ -8,6 +10,26 @@
     "navigationBarTextStyle": "white",
     "backgroundTextStyle": "dark",
     "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4fc08d",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "计算器",
+        "iconPath": "images/calculator.png",
+        "selectedIconPath": "images/calculator-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json"
 }

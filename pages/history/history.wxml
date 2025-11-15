@@ -1,0 +1,50 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <view class="stat-value">{{ statistics.totalDays }}</view>
+      <view class="stat-label">记录天数</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{ statistics.avgWater }}ml</view>
+      <view class="stat-label">日均摄入</view>
+    </view>
+    <view class="stat-item">
+      <view class="stat-value">{{ statistics.totalWater }}ml</view>
+      <view class="stat-label">累计摄入</view>
+    </view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="record-section">
+    <view class="section-title">历史记录（最近30天）</view>
+
+    <block wx:if="{{ !loading && recordList.length > 0 }}">
+      <van-swipe-cell wx:for="{{ recordList }}" wx:key="_id" right-width="{{ 65 }}">
+        <van-cell
+          title="{{ item.date }}"
+          label="总重量 {{ item.totalWeight }}g"
+          size="large"
+          bind:click="viewDetail"
+          data-record="{{ item }}"
+          is-link
+        >
+          <view slot="right-icon" class="record-water">
+            <text class="water-value">{{ item.totalWater }}</text>
+            <text class="water-unit">ml</text>
+          </view>
+        </van-cell>
+        <view slot="right" class="delete-btn" catch:tap="deleteRecord" data-id="{{ item._id }}">删除</view>
+      </van-swipe-cell>
+    </block>
+
+    <van-empty
+      wx:if="{{ !loading && recordList.length === 0 }}"
+      description="暂无记录"
+      image="search"
+    />
+  </view>
+</view>
+
+<van-dialog id="van-dialog" />
+<van-toast id="van-toast" />

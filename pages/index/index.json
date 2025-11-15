@@ -1,7 +1,6 @@
 {
   "usingComponents": {
     "van-search": "@vant/weapp/search/index",
-    "van-loading": "@vant/weapp/loading/index",
     "van-row": "@vant/weapp/row/index",
     "van-col": "@vant/weapp/col/index",
     "van-sidebar": "@vant/weapp/sidebar/index",
@@ -14,13 +13,11 @@
     "van-stepper": "@vant/weapp/stepper/index",
     "van-empty": "@vant/weapp/empty/index",
     "van-popup": "@vant/weapp/popup/index",
-    "van-nav-bar": "@vant/weapp/nav-bar/index",
     "van-swipe-cell": "@vant/weapp/swipe-cell/index",
     "van-dialog": "@vant/weapp/dialog/index",
     "van-toast": "@vant/weapp/toast/index",
     "van-goods-action": "@vant/weapp/goods-action/index",
     "van-goods-action-icon": "@vant/weapp/goods-action-icon/index",
-    "van-goods-action-button": "@vant/weapp/goods-action-button/index",
-    "van-submit-bar": "@vant/weapp/submit-bar/index"
+    "van-goods-action-button": "@vant/weapp/goods-action-button/index"
   }
 }
