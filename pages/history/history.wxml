@@ -1,48 +1,111 @@
 <view class="container">
-  <!-- 统计卡片 -->
-  <view class="stats-card">
-    <view class="stat-item">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-title">数据统计</view>
+    <view class="header-subtitle">记录你的每日摄入</view>
+  </view>
+
+  <!-- 统计卡片组 -->
+  <view class="stats-grid">
+    <view class="stat-card">
+      <view class="stat-icon">📅</view>
       <view class="stat-value">{{ statistics.totalDays }}</view>
       <view class="stat-label">记录天数</view>
     </view>
-    <view class="stat-item">
+    <view class="stat-card">
+      <view class="stat-icon">💧</view>
       <view class="stat-value">{{ statistics.avgWater }}ml</view>
       <view class="stat-label">日均摄入</view>
     </view>
-    <view class="stat-item">
+    <view class="stat-card">
+      <view class="stat-icon">🎯</view>
       <view class="stat-value">{{ statistics.totalWater }}ml</view>
       <view class="stat-label">累计摄入</view>
     </view>
   </view>
 
+  <!-- 趋势图表 -->
+  <view class="chart-card">
+    <view class="chart-header">
+      <view class="chart-title-wrapper">
+        <view class="chart-icon">📊</view>
+        <view class="chart-title">摄入趋势</view>
+      </view>
+      <view class="chart-tabs">
+        <view
+          class="chart-tab {{ chartRange === 7 ? 'active' : '' }}"
+          bind:tap="switchChartRange"
+          data-range="7"
+        >周</view>
+        <view
+          class="chart-tab {{ chartRange === 30 ? 'active' : '' }}"
+          bind:tap="switchChartRange"
+          data-range="30"
+        >月</view>
+        <view
+          class="chart-tab {{ chartRange === 365 ? 'active' : '' }}"
+          bind:tap="switchChartRange"
+          data-range="365"
+        >年</view>
+      </view>
+    </view>
+    <canvas
+      canvas-id="lineChart"
+      id="lineChart"
+      class="chart-canvas"
+      disable-scroll="true"
+    ></canvas>
+  </view>
+
   <!-- 记录列表 -->
-  <view class="record-section">
-    <view class="section-title">历史记录（最近30天）</view>
+  <view class="records-wrapper">
+    <view class="records-header">
+      <view class="records-title-wrapper">
+        <view class="records-icon">📝</view>
+        <view class="records-title">历史记录</view>
+      </view>
+      <view class="records-count">最近30天 · {{ recordList.length }}条</view>
+    </view>
 
     <block wx:if="{{ !loading && recordList.length > 0 }}">
-      <van-swipe-cell wx:for="{{ recordList }}" wx:key="_id" right-width="{{ 65 }}">
-        <van-cell
-          title="{{ item.date }}"
-          label="总重量 {{ item.totalWeight }}g"
-          size="large"
-          bind:click="viewDetail"
-          data-record="{{ item }}"
-          is-link
-        >
-          <view slot="right-icon" class="record-water">
-            <text class="water-value">{{ item.totalWater }}</text>
-            <text class="water-unit">ml</text>
+      <view wx:for="{{ recordList }}" wx:key="_id" class="record-card">
+        <view class="record-main" bind:tap="viewDetail" data-record="{{ item }}">
+          <view class="record-left">
+            <view class="record-date">{{ item.date }}</view>
+            <view class="record-detail">
+              <view class="detail-item">
+                <text class="detail-label">食物重量</text>
+                <text class="detail-value">{{ item.totalWeight }}g</text>
+              </view>
+              <view class="detail-item">
+                <text class="detail-label">食物种类</text>
+                <text class="detail-value">{{ item.foods.length }}种</text>
+              </view>
+            </view>
           </view>
-        </van-cell>
-        <view slot="right" class="delete-btn" catch:tap="deleteRecord" data-id="{{ item._id }}">删除</view>
-      </van-swipe-cell>
+          <view class="record-right">
+            <view class="record-water-amount">{{ item.totalWater }}ml</view>
+            <view class="record-label">含水量</view>
+          </view>
+        </view>
+        <view class="record-actions">
+          <view class="action-btn view-btn" bind:tap="viewDetail" data-record="{{ item }}">
+            <text class="btn-icon">👁</text>
+            <text class="btn-text">查看详情</text>
+          </view>
+          <view class="action-btn delete-btn" catch:tap="deleteRecord" data-id="{{ item._id }}">
+            <text class="btn-icon">🗑</text>
+            <text class="btn-text">删除</text>
+          </view>
+        </view>
+      </view>
     </block>
 
-    <van-empty
-      wx:if="{{ !loading && recordList.length === 0 }}"
-      description="暂无记录"
-      image="search"
-    />
+    <view wx:if="{{ !loading && recordList.length === 0 }}" class="empty-state">
+      <view class="empty-icon">📭</view>
+      <view class="empty-text">暂无记录</view>
+      <view class="empty-hint">快去计算器页面添加食物吧</view>
+    </view>
   </view>
 </view>
 

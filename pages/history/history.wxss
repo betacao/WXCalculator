@@ -1,74 +1,297 @@
+/* 容器 */
 .container {
-  padding: 20rpx;
-  background-color: #f8f8f8;
   min-height: 100vh;
+  background: linear-gradient(180deg, #f0f9f6 0%, #fafafa 400rpx);
+  padding: 20rpx 16rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
 }
 
-.stats-card {
-  display: flex;
-  background: linear-gradient(135deg, #4fc08d 0%, #3aa876 100%);
-  border-radius: 16rpx;
-  padding: 40rpx 20rpx;
+/* ==================== 页面标题 ==================== */
+.page-header {
   margin-bottom: 20rpx;
-  box-shadow: 0 4rpx 12rpx rgba(79, 192, 141, 0.3);
+  padding: 0 4rpx;
 }
 
-.stat-item {
-  flex: 1;
-  text-align: center;
-  color: white;
-}
-
-.stat-value {
+.header-title {
   font-size: 48rpx;
   font-weight: bold;
+  color: #2c3e50;
   margin-bottom: 8rpx;
 }
 
-.stat-label {
-  font-size: 24rpx;
-  opacity: 0.9;
+.header-subtitle {
+  font-size: 26rpx;
+  color: #95a5a6;
 }
 
-.record-section {
-  background-color: white;
+/* ==================== 统计卡片组 ==================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10rpx;
+  margin-bottom: 18rpx;
+}
+
+.stat-card {
+  background: white;
   border-radius: 16rpx;
-  overflow: hidden;
+  padding: 24rpx 12rpx;
+  box-shadow: 0 4rpx 20rpx rgba(79, 192, 141, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s;
 }
 
-.section-title {
-  padding: 30rpx 30rpx 20rpx;
+.stat-icon {
+  font-size: 40rpx;
+  margin-bottom: 12rpx;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #4fc08d;
+  margin-bottom: 6rpx;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: #7f8c8d;
+}
+
+/* ==================== 图表卡片 ==================== */
+.chart-card {
+  background: white;
+  border-radius: 16rpx;
+  padding: 24rpx 20rpx;
+  margin-bottom: 18rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.chart-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.chart-icon {
+  font-size: 36rpx;
+}
+
+.chart-title {
   font-size: 32rpx;
   font-weight: bold;
-  color: #333;
+  color: #2c3e50;
 }
 
-.record-water {
+.chart-tabs {
+  display: flex;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 6rpx;
+  gap: 6rpx;
+}
+
+.chart-tab {
+  padding: 10rpx 20rpx;
+  font-size: 24rpx;
+  color: #666;
+  border-radius: 8rpx;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+
+.chart-tab.active {
+  background: linear-gradient(135deg, #4fc08d 0%, #3aa876 100%);
+  color: white;
+  box-shadow: 0 2rpx 8rpx rgba(79, 192, 141, 0.3);
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 400rpx;
+}
+
+/* ==================== 记录列表 ==================== */
+.records-wrapper {
+  margin-bottom: 20rpx;
+}
+
+.records-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.records-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.records-icon {
+  font-size: 36rpx;
+}
+
+.records-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.records-count {
+  font-size: 24rpx;
+  color: #95a5a6;
+}
+
+/* 记录卡片 */
+.record-card {
+  background: white;
+  border-radius: 16rpx;
+  margin-bottom: 14rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.record-card:active {
+  transform: scale(0.98);
+}
+
+.record-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 20rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.record-left {
+  flex: 1;
+}
+
+.record-date {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 18rpx;
+}
+
+.record-detail {
+  display: flex;
+  gap: 32rpx;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.detail-label {
+  font-size: 24rpx;
+  color: #95a5a6;
+}
+
+.detail-value {
+  font-size: 28rpx;
+  color: #34495e;
+  font-weight: 500;
+}
+
+.record-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  margin-right: 20rpx;
+  padding-left: 24rpx;
 }
 
-.water-value {
-  font-size: 36rpx;
+.record-water-amount {
+  font-size: 52rpx;
   font-weight: bold;
   color: #4fc08d;
+  line-height: 1;
+  margin-bottom: 10rpx;
 }
 
-.water-unit {
+.record-label {
   font-size: 24rpx;
-  color: #999;
-  margin-top: 4rpx;
+  color: #95a5a6;
 }
 
-.delete-btn {
-  height: 100%;
+/* 操作按钮 */
+.record-actions {
+  display: flex;
+  background: #fafafa;
+}
+
+.action-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ee0a24;
-  color: white;
+  gap: 10rpx;
+  padding: 24rpx;
   font-size: 28rpx;
-  padding: 0 20rpx;
+  transition: all 0.3s;
+}
+
+.action-btn:active {
+  opacity: 0.7;
+}
+
+.view-btn {
+  color: #4fc08d;
+  border-right: 2rpx solid #f0f0f0;
+}
+
+.delete-btn {
+  color: #e74c3c;
+}
+
+.btn-icon {
+  font-size: 32rpx;
+}
+
+.btn-text {
+  font-weight: 500;
+}
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  background: white;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #95a5a6;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #bdc3c7;
 }

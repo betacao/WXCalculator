@@ -1,19 +1,26 @@
 import Toast from '@vant/weapp/toast/toast';
 import Dialog from '@vant/weapp/dialog/dialog';
 import { formatDate } from '../../utils/format';
+import { drawLineChart, prepareChartData } from '../../utils/chart';
 
 Page({
   data: {
     userInfo: null,
     loading: true,
     recordList: [],
+    allRecords: [], // 存储所有记录用于图表
     themeColor: '#4fc08d',
+    chartRange: 7, // 图表时间范围（7/30/365）
     statistics: {
       totalDays: 0,
       avgWater: 0,
       totalWater: 0
     }
   },
+
+  canvasContext: null,
+  canvasWidth: 0,
+  canvasHeight: 0,
 
   onLoad() {
     const userInfo = wx.getStorageSync('userInfo');
@@ -24,6 +31,7 @@ Page({
       return;
     }
     this.setData({ userInfo });
+    this.initCanvas();
     this.loadRecords();
   },
 
@@ -31,6 +39,25 @@ Page({
     if (this.data.userInfo) {
       this.loadRecords();
     }
+  },
+
+  onReady() {
+    this.initCanvas();
+  },
+
+  /**
+   * 初始化画布
+   */
+  initCanvas() {
+    const query = wx.createSelectorQuery();
+    query.select('#lineChart').boundingClientRect();
+    query.exec((res) => {
+      if (res[0]) {
+        this.canvasWidth = res[0].width;
+        this.canvasHeight = res[0].height;
+        this.canvasContext = wx.createCanvasContext('lineChart');
+      }
+    });
   },
 
   // ==================== 数据加载 ====================
@@ -43,10 +70,12 @@ Page({
       wx.showLoading({ title: '加载中...' });
 
       const db = wx.cloud.database();
+
+      // 加载用于列表显示的30天记录
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const res = await db.collection('water_records')
+      const listRes = await db.collection('water_records')
         .where({
           _openid: this.data.userInfo.openid,
           date: db.command.gte(formatDate(thirtyDaysAgo))
@@ -54,13 +83,29 @@ Page({
         .orderBy('date', 'desc')
         .get();
 
-      const statistics = this.calculateStatistics(res.data);
+      // 加载用于图表的一年记录
+      const oneYearAgo = new Date();
+      oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+
+      const chartRes = await db.collection('water_records')
+        .where({
+          _openid: this.data.userInfo.openid,
+          date: db.command.gte(formatDate(oneYearAgo))
+        })
+        .orderBy('date', 'asc')
+        .get();
+
+      const statistics = this.calculateStatistics(listRes.data);
 
       this.setData({
-        recordList: res.data,
+        recordList: listRes.data,
+        allRecords: chartRes.data,
         statistics,
         loading: false
       });
+
+      // 绘制图表
+      this.drawChart();
     } catch (error) {
       console.error('加载记录失败:', error);
       Toast.fail('加载失败');
@@ -131,6 +176,41 @@ Page({
         wx.hideLoading();
       }
     }).catch(() => {});
+  },
+
+  // ==================== 图表相关 ====================
+
+  /**
+   * 绘制图表
+   */
+  drawChart() {
+    if (!this.canvasContext || !this.canvasWidth) {
+      // 如果画布还未初始化，延迟绘制
+      setTimeout(() => {
+        if (this.canvasContext && this.canvasWidth) {
+          this.drawChart();
+        }
+      }, 500);
+      return;
+    }
+
+    const chartData = prepareChartData(this.data.allRecords, this.data.chartRange);
+
+    drawLineChart(this.canvasContext, {
+      data: chartData,
+      width: this.canvasWidth,
+      height: this.canvasHeight,
+      color: this.data.themeColor
+    });
+  },
+
+  /**
+   * 切换图表时间范围
+   */
+  switchChartRange(e) {
+    const range = parseInt(e.currentTarget.dataset.range);
+    this.setData({ chartRange: range });
+    this.drawChart();
   },
 
   // ==================== 页面跳转 ====================
