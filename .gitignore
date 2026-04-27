@@ -1,1 +1,8 @@
 .DS_Store
+hosting_upload/
+scripts/
+.cloudbase-config/
+.cloudbase-mcp/
+.config/
+cloudbase-framework/
+CLOUDBASE_HOSTING.md

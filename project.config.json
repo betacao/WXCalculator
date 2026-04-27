@@ -1,9 +1,38 @@
 {
   "appid": "wx9cb4eac767726cfd",
   "compileType": "miniprogram",
-  "libVersion": "3.7.10",
+  "libVersion": "3.7.9",
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      {
+        "type": "glob",
+        "value": "hosting_upload/**"
+      },
+      {
+        "type": "glob",
+        "value": "scripts/**"
+      },
+      {
+        "type": "glob",
+        "value": ".cloudbase-config/**"
+      },
+      {
+        "type": "glob",
+        "value": ".cloudbase-mcp/**"
+      },
+      {
+        "type": "glob",
+        "value": ".config/**"
+      },
+      {
+        "type": "glob",
+        "value": "cloudbase-framework/**"
+      },
+      {
+        "type": "file",
+        "value": "CLOUDBASE_HOSTING.md"
+      }
+    ],
     "include": []
   },
   "setting": {
@@ -18,7 +47,19 @@
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    }
+    },
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true
   },
   "condition": {},
   "editorSetting": {

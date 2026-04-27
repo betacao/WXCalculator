@@ -30,6 +30,7 @@ Page({
   },
 
   searchTimer: null,
+  foodCache: null,
 
   async onLoad() {
     this.initCloud();
@@ -65,12 +66,13 @@ Page({
       wx.showLoading({ title: '加载中...', mask: true });
 
       // 先尝试从缓存加载
-      const cachedData = loadFromCache();
-      if (cachedData) {
+      const cachedCache = loadFromCache();
+      if (cachedCache && Array.isArray(cachedCache.data)) {
         console.log('✅ 从缓存加载数据');
+        this.foodCache = cachedCache;
         this.setData({
-          foodData: cachedData,
-          filteredFoodData: cachedData,
+          foodData: cachedCache.data,
+          filteredFoodData: cachedCache.data,
           loading: false
         });
         wx.hideLoading();
@@ -86,7 +88,9 @@ Page({
         console.log('🔄 尝试重新加载...');
         await this.fetchData();
       } catch (retryError) {
-        Toast.fail('数据加载失败，请检查网络后重试');
+        console.error('重试后仍然失败:', retryError);
+        const errorMessage = retryError?.errMsg || retryError?.message || '请检查网络后重试';
+        Toast.fail(`数据加载失败：${errorMessage}`);
         this.setData({ loading: false });
       }
     } finally {
@@ -95,27 +99,35 @@ Page({
   },
 
   async fetchData() {
-    const displayList = await fetchFoodData();
-    saveToCache(displayList);
+    const result = await fetchFoodData(this.foodCache);
+    this.foodCache = result;
+    if (!result.unchanged) {
+      saveToCache(result);
+    }
     this.setData({
-      foodData: displayList,
-      filteredFoodData: displayList,
+      foodData: result.data,
+      filteredFoodData: result.data,
       loading: false
     });
   },
 
   async updateDataInBackground() {
     try {
-      const displayList = await fetchFoodData();
-      saveToCache(displayList);
+      const result = await fetchFoodData(this.foodCache);
+      if (result.unchanged) {
+        return;
+      }
+
+      this.foodCache = result;
+      saveToCache(result);
       this.setData({
-        foodData: displayList,
+        foodData: result.data,
         filteredFoodData: this.data.searchValue ?
-          filterFoodData(displayList, this.data.searchValue) : displayList
+          filterFoodData(result.data, this.data.searchValue) : result.data
       });
       console.log('✅ 后台数据更新完成');
     } catch (error) {
-      console.log('后台更新失败，使用缓存数据:', error);
+      console.log('后台更新失败，使用缓存数据:', error?.errMsg || error?.message || error);
     }
   },
 
